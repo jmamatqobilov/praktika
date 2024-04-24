@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
 
 
 Route::controller(AuthController::class)->group(function () {
@@ -27,13 +27,14 @@ Route::controller(AuthController::class)->group(function () {
 
     Route::get('logout', 'logout')->middleware('auth')->name('logout');
 });
+Route::get('dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
 
-    Route::controller(ProductController::class)->prefix('products')->group(function () {
+
+    Route::controller(\App\Http\Controllers\DocumentController::class)->prefix('products')->group(function () {
         Route::get('', 'index')->name('products');
         Route::get('create', 'create')->name('products.create');
         Route::post('store', 'store')->name('products.store');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Document;
 use Illuminate\Http\Request;
 
 class DocumentController extends Controller
@@ -13,10 +14,9 @@ class DocumentController extends Controller
 
     public function all()
     {
-        $applications = $this->service->getList();
-        // echo asset('storage/file.txt');
-        // dd($applications);
-        return view('blog.allapp',['applications'=>$applications]);
+        $document = Document::orderBy('created_at', 'DESC')->get();
+
+        return view('pages.documents.index', compact('document'));
     }
 
     public function topUsers()
@@ -28,7 +28,7 @@ class DocumentController extends Controller
 
     public function create()
     {
-        return view('blog.create');
+        return view('pages.documents.create');
     }
 
     public function store(Request $request)
@@ -58,16 +58,18 @@ class DocumentController extends Controller
         }
     }
 
-    public function show($id)
+    public function show(string $id)
     {
-        $application = Application::find($id);
-        return view('blog.show', ['post' => $application]);
+        $product = Product::findOrFail($id);
+
+        return view('products.show', compact('product'));
     }
 
-    public function edit($id)
+    public function edit(string $id)
     {
-        $application = Application::find($id);
-        return view('blog.edit', ['application' => $application]);
+        $product = Product::findOrFail($id);
+
+        return view('products.edit', compact('product'));
     }
 
     public function update(Request $request, $id)
